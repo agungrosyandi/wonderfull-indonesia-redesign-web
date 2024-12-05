@@ -1,0 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* default settings */
+
+@font-face {
+  font-family: "DrukBoldTrial";
+  src: url("../../fonts/Druk-Bold-Trial.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "DrukMediumTrial";
+  src: url("../../fonts/Druk-Medium-Trial.otf") format("opentype");
+}
+
+:root {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+
+  /* color */
+
+  --mainColor: #f5efe7;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}

@@ -2,11 +2,9 @@ import DestinationHighlight from "@/components/home-components/DestinationHighli
 import TravelGuide from "@/components/home-components/TravelGuide";
 import HomeContainer from "@/components/home-components/HomeContainer";
 import HomeDescription from "@/components/home-components/HomeDescription";
-import HomePopularSearch from "@/components/home-components/HomePopularSearch";
 import HomeTitle from "@/components/home-components/HomeTitle";
 import SearchForm from "@/components/home-components/search-form";
 import VideoBackground from "@/components/VideoBackground";
-import AboutClosing from "@/components/home-components/AboutClosing";
 import ContentContainer from "@/components/home-components/ContentContainer";
 
 export default function Home() {
@@ -18,7 +16,6 @@ export default function Home() {
         </HomeTitle>
         <HomeDescription>Visit our beautiful Destinations</HomeDescription>
         <SearchForm />
-        <HomePopularSearch />
         <VideoBackground />
       </HomeContainer>
 
@@ -28,10 +25,6 @@ export default function Home() {
 
       <ContentContainer>
         <TravelGuide />
-      </ContentContainer>
-
-      <ContentContainer>
-        <AboutClosing />
       </ContentContainer>
     </main>
   );

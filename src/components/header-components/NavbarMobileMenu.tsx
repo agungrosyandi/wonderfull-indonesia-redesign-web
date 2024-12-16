@@ -2,8 +2,21 @@
 
 import { useState } from "react";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { routes } from "./Navbar";
 import Link from "next/link";
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+import {
+  NavbarMenuMobileTitle,
+  NavbarMenuMobileSubTitle,
+} from "./NavbarMenuMobileTitle";
+
+import { goExplore, plantYourTrip } from "./NavbarMobileMap";
 
 export default function NavbarMenuMobile() {
   const [nav, setNav] = useState(true);
@@ -27,18 +40,51 @@ export default function NavbarMenuMobile() {
             : "fixed left-[-100%] w-full h-full ease-in-out duration-1500 opacity-0"
         }
       >
-        <ul className="text-lg w-full h-screen text-white p-4 uppercase flex flex-col justify-center items-center gap-y-5">
-          {routes.map((route) => (
-            <li
-              className="border-b border-[#fa2a2a] p-5 text-base tabletMinWidth:text-2xl"
-              key={route.path}
-            >
-              <Link onClick={handleNav} href={route.path}>
-                {route.name}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="w-full h-screen p-4 uppercase flex flex-col justify-center items-center gap-y-5">
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-1">
+              <AccordionTrigger>
+                <NavbarMenuMobileTitle>Go Explore</NavbarMenuMobileTitle>
+              </AccordionTrigger>
+              <AccordionContent>
+                <NavbarMenuMobileSubTitle>
+                  {goExplore.map((route) => (
+                    <div
+                      key={route.id}
+                      className="text-xs tabletMinWidth:text-base"
+                    >
+                      <Link onClick={handleNav} href={route.path}>
+                        {route.name}
+                      </Link>
+                    </div>
+                  ))}
+                </NavbarMenuMobileSubTitle>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
+          <Accordion type="single" collapsible>
+            <AccordionItem value="item-2">
+              <AccordionTrigger>
+                <NavbarMenuMobileTitle>Plant your trip</NavbarMenuMobileTitle>
+              </AccordionTrigger>
+              <AccordionContent>
+                <NavbarMenuMobileSubTitle>
+                  {plantYourTrip.map((route) => (
+                    <div
+                      key={route.id}
+                      className="text-xs tabletMinWidth:text-base"
+                    >
+                      <Link onClick={handleNav} href={route.path}>
+                        {route.name}
+                      </Link>
+                    </div>
+                  ))}
+                </NavbarMenuMobileSubTitle>
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </div>
       <div
         className={

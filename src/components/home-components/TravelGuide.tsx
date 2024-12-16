@@ -49,7 +49,7 @@ const destinationList = [
     description:
       "Make sure to learn about all the immigration requirements that should be fulfilled before visiting Indonesia, including e-passport and e-visa.",
     button: "More detail",
-    link: "/",
+    link: "/e-visa",
   },
 
   {
@@ -71,13 +71,13 @@ const DestinationProps = ({
   link,
 }: ParamsPropsDestination) => {
   return (
-    <div className="relative col-span-4 grid-flow tabletMinWidth:col-span-4 desktopMinWidth:col-span-2">
-      <div className="flex flex-col shadow-xl">
-        <div className="relative w-full shadow-xl">{image}</div>
-        <div className="flex flex-col gap-5 py-10 px-5 backdrop-blur-sm bg-white/30">
+    <div className="relative col-span-4 grid-flow tabletMinWidth:col-span-4">
+      <div className="flex flex-col shadow-xl desktopMinWidth:flex-row">
+        <div className="relative flex-1 w-full shadow-xl">{image}</div>
+        <div className="flex flex-1 flex-col gap-5 py-10 px-5 backdrop-blur-sm bg-white/30 desktopMinWidth:justify-center">
           <h1 className="text-xl font-bold">{title}</h1>
           <p
-            className={`${roboto.className} text-base tabletMinWidth:text-lg desktopMinWidth:px-20`}
+            className={`${roboto.className} text-base tabletMinWidth:text-lg`}
           >
             {description}
           </p>

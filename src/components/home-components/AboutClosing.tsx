@@ -4,7 +4,7 @@ import { roboto } from "@/utils/fonts";
 
 export default function AboutClosing() {
   return (
-    <div className="relative bg-white px-[5%] flex gap-5 flex-col justify-center items-center text-center py-[2rem]">
+    <div className="relative bg-[#ffffff] px-[5%] flex gap-5 flex-col justify-center items-center text-center py-[2rem]">
       <div className="relative w-[100%] desktopMinWidth:w-[50%]">
         <Image src={wondefulIndonesiaPNG} alt="" />
       </div>

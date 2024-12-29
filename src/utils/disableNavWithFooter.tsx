@@ -1,1 +1,1 @@
-export const disableNavWithFooter = ["/dashboard"];
+export const disableNavWithFooter = ["/dashboard", "/admin-auth", "/secret"];

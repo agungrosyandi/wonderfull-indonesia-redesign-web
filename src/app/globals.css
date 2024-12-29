@@ -21,6 +21,8 @@
   /* color */
 
   --mainColor: #f5efe7;
+  --swiper-navigation-color: rgb(113, 113, 113);
+  --swiper-pagination-color: rgb(113, 113, 113);
 }
 
 * {
@@ -35,6 +37,27 @@ body {
 
 body::-webkit-scrollbar {
   display: none;
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }
 
 @layer base {

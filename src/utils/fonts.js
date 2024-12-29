@@ -1,4 +1,4 @@
-import { Roboto, Montserrat, Poppins } from "next/font/google";
+import { Roboto, Montserrat, Poppins, ADLaM_Display } from "next/font/google";
 
 const poppinsFontRegular400 = Poppins({
   style: ["normal"],
@@ -18,4 +18,10 @@ const roboto = Roboto({
   weight: ["400"],
 });
 
-export { poppinsFontRegular400, montserrat, roboto };
+const ADLam = ADLaM_Display({
+  style: ["normal"],
+  subsets: ["latin"],
+  weight: ["400"],
+});
+
+export { poppinsFontRegular400, montserrat, roboto, ADLam };

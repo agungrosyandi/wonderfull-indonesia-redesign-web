@@ -1,10 +1,17 @@
 import { ADLam } from "@/utils/fonts";
+import { roboto } from "@/utils/fonts";
 
 export default function AboutIndonesia() {
   return (
     <div className="relative hidden desktopMinWidth:gap-32 desktopMinWidth:top-[5rem] desktopMinWidth:flex desktopMinWidth:flex-row desktopMinWidth:justify-around desktopMinWidth:items-center desktopMinWidth:text-start fullHdMinWidth:top-[8rem]">
-      <h1 className={`${ADLam.className} flex-1 text-4xl fullHdMinWidth:text-4xl`}>About Us</h1>
-      <p className=" flex-1 text-xs">
+      <h1
+        className={`${ADLam.className} flex-1 text-3xl`}
+      >
+        About Us
+      </h1>
+      <p
+        className={`${roboto.className} flex-1 text-xs tabletMinWidth:text-sm`}
+      >
         The history of Indonesia can be marked as the dawn of mankind since it
         is where the remains of the early man were unearthed. During the ancient
         age of kingdoms and empires, Indonesia saw the rise of the great empires

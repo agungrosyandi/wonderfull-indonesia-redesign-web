@@ -62,7 +62,7 @@ const data = {
           url: "/write-konten",
         },
         {
-          title: "Tulis konten Slug",
+          title: "List publish konten",
           url: "#",
         },
         {

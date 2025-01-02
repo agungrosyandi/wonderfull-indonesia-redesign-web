@@ -8,7 +8,7 @@ import { notFound } from "next/navigation";
 // kategori createPost  --------------------------------------------------------
 
 export async function createPost(formData: FormData) {
-  await sleep(1000);
+  await sleep(2000);
 
   try {
     await prisma.kategoriDestination.create({
@@ -46,6 +46,8 @@ export async function createPost(formData: FormData) {
 // kategori post  --------------------------------------------------------
 
 export async function getDestination(places: string, page = 1) {
+  const PAGE_SIZE = 6;
+
   const destinations = await prisma.kategoriDestination.findMany({
     where: {
       city: places === "all" ? undefined : places,
@@ -53,11 +55,10 @@ export async function getDestination(places: string, page = 1) {
     orderBy: {
       date: "asc",
     },
-    take: 6,
-    skip: (page - 1) * 6,
-  });
+    take: PAGE_SIZE,
 
-  // await prisma.kategoriDestination.count();
+    skip: (page - 1) * PAGE_SIZE,
+  });
 
   let totalCount;
 
@@ -71,41 +72,12 @@ export async function getDestination(places: string, page = 1) {
     });
   }
 
-  return { destinations, totalCount };
+  return {
+    destinations,
+    totalCount,
+  };
 }
 
-// testing  --------------------------------------------------------
-
-// export async function getDestination2(places: string, page = 1) {
-//   const destinations = await prisma.$transaction([
-//     prisma.kategoriDestination.findMany({
-//       where: {
-//         city: places === "all" ? undefined : places,
-//       },
-//       orderBy: {
-//         date: "asc",
-//       },
-//       take: 6,
-//       skip: (page - 1) * 6,
-//     }),
-
-//     prisma.kategoriDestination.count(),
-//   ]);
-
-//   let totalCount;
-
-//   if (places === "all") {
-//     totalCount = await prisma.kategoriDestination.count();
-//   } else {
-//     totalCount = await prisma.kategoriDestination.count({
-//       where: {
-//         city: places,
-//       },
-//     });
-//   }
-
-//   return { destinations, totalCount };
-// }
 // kategori post slug  --------------------------------------------------------
 
 export async function getDestinationSlug(slug: string) {
@@ -120,4 +92,18 @@ export async function getDestinationSlug(slug: string) {
   }
 
   return destinationSlug;
+}
+
+// kategori search slug  --------------------------------------------------------
+
+export async function searchDestinations(searchQuery: string) {
+  const allDatabase = await prisma.kategoriDestination.findMany({
+    where: {
+      OR: [
+        { name: { contains: searchQuery, mode: "insensitive" } },
+        { description: { contains: searchQuery, mode: "insensitive" } },
+      ],
+    },
+  });
+  return allDatabase;
 }

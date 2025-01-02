@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearch } from "@/hooks/useSearch";
 import { PaginationControlProps } from "@/utils/type";
 import Link from "next/link";
 import { FaLongArrowAltLeft, FaLongArrowAltRight } from "react-icons/fa";
@@ -10,8 +9,6 @@ export default function PaginationControl({
   page,
   totalCount,
 }: PaginationControlProps) {
-  // const { totalCount } = useSearch();
-
   const previousPath =
     page > 1 ? `/list-destination/${places}?page=${page - 1}` : "";
 

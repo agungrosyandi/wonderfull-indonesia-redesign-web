@@ -1,4 +1,3 @@
-import { roboto } from "@/utils/fonts";
 import H1Title from "./H1Title";
 import {
   Image1,
@@ -9,6 +8,17 @@ import {
   Image6,
 } from "./ImageDestinations";
 import Link from "next/link";
+import Description from "@/utils/global-component/Description";
+
+import image1 from "../../../../../public/image/bunaken.jpg";
+import image2 from "../../../../../public/image/borobudur-temple.jpg";
+import image3 from "../../../../../public/image/tegallang-rice-field.jpg";
+import image4 from "../../../../../public/image/bg-main-home-4.jpg";
+import image5 from "../../../../../public/image/jakarta-2.jpg";
+import image6 from "../../../../../public/image/labuan-bajo.jpg";
+
+
+
 
 export default function DestinationHighlight() {
   return (
@@ -82,11 +92,7 @@ const DestinationProps = ({ title, image, path }: ParamsPropsDestination) => {
         <div className="relative w-full">
           {image}
           <div className="absolute inset-0 z-20 flex justify-center items-center">
-            <h1
-              className={`${roboto.className} text-sm tabletMinWidth:text-base`}
-            >
-              {title}
-            </h1>
+            <Description>{title}</Description>
           </div>
           <div className="absolute inset-0 w-full h-full bg-black/20"></div>
         </div>

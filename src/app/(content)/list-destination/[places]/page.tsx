@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import Loading from "./loading";
 import { z } from "zod";
 import ImageBackgroundListDestination from "./component/ImageBackgroundListDestination";
+
 import DestinationList from "./component/ListDestination";
 
 export function generateMetadata({ params }: ParamsProps) {

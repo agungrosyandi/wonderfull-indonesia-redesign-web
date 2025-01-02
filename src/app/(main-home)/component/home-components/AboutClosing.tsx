@@ -9,7 +9,7 @@ export default function AboutClosing() {
         <Image src={wondefulIndonesiaPNG} alt="" />
       </div>
       <p
-        className={`${roboto.className} text-sm text-black tabletMinWidth:text-base tabletMinWidth:px-[3rem] desktopMinWidth:px-[5rem] fullHdMinWidth:px-[20rem]`}
+        className={`${roboto.className} text-xs text-black tabletMinWidth:text-sm tabletMinWidth:px-[3rem] desktopMinWidth:px-[5rem] fullHdMinWidth:px-[20rem]`}
       >
         This is the official website of the Ministry of Tourism, Republic of
         Indonesia. The contents listed on this website are intended for

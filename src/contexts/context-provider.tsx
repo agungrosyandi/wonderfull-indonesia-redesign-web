@@ -2,25 +2,29 @@
 
 import { KategoriDestination } from "@prisma/client";
 import { useRouter } from "next/navigation";
-
-import { createContext, useState } from "react";
+import { createContext, useState, Dispatch, SetStateAction } from "react";
 
 // type ---------------------------------------------------------------------------------
 
+type ContextProviderProps = {
+  totalCount: number;
+  children: React.ReactNode;
+  allDatabase: KategoriDestination[];
+  destinations: KategoriDestination[];
+};
+
 type TstateContext = {
+  totalCount: number;
   searchText: string;
   handleChangeSearchQuery: (newValue: string) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   destinations: KategoriDestination[];
   allDatabase: KategoriDestination[];
-  totalCount: number;
-};
-
-type ContextProviderProps = {
-  children: React.ReactNode;
-  allDatabase: KategoriDestination[];
-  destinations: KategoriDestination[];
-  totalCount: number;
+  setSearchText: Dispatch<SetStateAction<string>>;
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
+  loading: boolean;
+  setLoading: Dispatch<SetStateAction<boolean>>;
 };
 
 // function ---------------------------------------------------------------------------------
@@ -35,8 +39,10 @@ export default function StateContextProvider({
 }: ContextProviderProps) {
   // usestate logic ------------------------------------------------------------------
 
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState<string>("");
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // javascript logic ------------------------------------------------------------------
 
@@ -55,15 +61,6 @@ export default function StateContextProvider({
     setSearchText(newValue);
   };
 
-  // const handleFilterMap = async ({
-  //   places,
-  //   page = 1,
-  // }: TypeDestinationListProps) => {
-  //   const { destinations } = await getDestination(places, page);
-
-  //   return destinations;
-  // };
-
   // return callback ------------------------------------------------------------------
 
   return (
@@ -75,6 +72,11 @@ export default function StateContextProvider({
         destinations,
         totalCount,
         allDatabase,
+        setSearchText,
+        open,
+        setOpen,
+        loading,
+        setLoading,
       }}
     >
       {children}

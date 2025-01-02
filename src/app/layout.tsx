@@ -5,7 +5,7 @@ import Header from "@/app/(main-home)/component/Header";
 import Container from "@/app/(main-home)/component/Container";
 import { ReactLenis } from "@/hooks/useLenis";
 import StateContextProvider from "@/contexts/context-provider";
-import { getDestination } from "@/actions/actions";
+import { getDestination, searchDestinations } from "@/actions/actions";
 import { Toaster } from "@/components/ui/sonner";
 import prisma from "@/utils/db";
 import Footer from "@/app/(main-home)/component/Footer";
@@ -24,10 +24,13 @@ export default async function RootLayout(
     children: React.ReactNode;
   }>,
   places: string,
-  page = 1
+  page = 1,
+  searchQuery: string
 ) {
   const { destinations, totalCount } = await getDestination(places, (page = 1));
   const allDatabase = await prisma.kategoriDestination.findMany();
+
+  // const allDatabase = await searchDestinations(searchQuery);
 
   return (
     <html lang="en">

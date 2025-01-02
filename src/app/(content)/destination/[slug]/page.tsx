@@ -1,4 +1,6 @@
 import { getDestinationSlug } from "@/actions/actions";
+import { roboto } from "@/utils/fonts";
+import DescriptionSlug from "@/utils/global-component/DescriptionSlug";
 import { ParamsPropsSlug } from "@/utils/type";
 
 import { Metadata } from "next";
@@ -67,16 +69,15 @@ export default async function EventPage({ params }: ParamsPropsSlug) {
       "
       >
         <div className="flex flex-col gap-5">
-          <h2 className="text-lg font-bold">About Destinations</h2>
+          <h2 className="text-lg font-bold tabletMinWidth:text-2xl">
+            About Destinations
+          </h2>
           <div className="flex gap-1 flex-row items-center justify-center">
             <h2 className="text-xs font-bold">Location :</h2>
             <p className="text-xs font-bold">{destinationSlug.city}, </p>
             <p className="text-xs font-bold">{destinationSlug.location}</p>
           </div>
-          <p className="text-xs text-start tabletMinWidth:text-sm">
-            <span>{destinationSlug.description}</span>
-          </p>
-
+          <DescriptionSlug>{destinationSlug.description}</DescriptionSlug>
           <div className="relative flex flex-col gap-5 tabletMinWidth:flex-row-reverse tabletMinWidth:flex-1 tabletMinWidth:items-center">
             <div className="relative">
               <Image
@@ -103,12 +104,8 @@ export default async function EventPage({ params }: ParamsPropsSlug) {
               />
             </div>
           </div>
-          <p className="text-xs text-start tabletMinWidth:text-sm tabletMinWidth:flex-1">
-            {destinationSlug.description2}
-          </p>
-          <p className="text-xs text-start tabletMinWidth:text-sm tabletMinWidth:flex-1">
-            {destinationSlug.description3}
-          </p>
+          <DescriptionSlug>{destinationSlug.description2}</DescriptionSlug>
+          <DescriptionSlug>{destinationSlug.description3}</DescriptionSlug>
         </div>
       </section>
     </main>

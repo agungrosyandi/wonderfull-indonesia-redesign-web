@@ -1,53 +1,82 @@
+"use client";
+import { FC } from "react";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
+
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
-  PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
-import { useSearch } from "@/hooks/useSearch";
-import { PaginationControlProps } from "@/utils/type";
 
-export default function PaginationControl2({
-  places,
-  page,
-}: PaginationControlProps) {
-  const { totalCount } = useSearch();
+import { Button } from "@/components/ui/button";
 
-  const previousPath =
-    page > 1 ? `/list-destination/${places}?page=${page - 1}` : "";
+interface PaginationProps {
+  pageCount: number;
+}
 
-  const nextPath =
-    totalCount > 6 * page ? `/list-destination/${places}?page=${page + 1}` : "";
+interface PaginationArrowProps {
+  direction: "left" | "right";
+  href: string;
+  isDisabled: boolean;
+}
+
+const PaginationArrow: FC<PaginationArrowProps> = ({
+  direction,
+  href,
+  isDisabled,
+}) => {
+  const router = useRouter();
+  const isLeft = direction === "left";
+  const disabledClassName = isDisabled ? "opacity-50 cursor-not-allowed" : "";
 
   return (
-    <section className="relative col-span-6">
+    <Button
+      onClick={() => router.push(href)}
+      className={`bg-gray-100 text-gray-500 hover:bg-gray-200 ${disabledClassName}`}
+      aria-disabled={isDisabled}
+      disabled={isDisabled}
+    >
+      {isLeft ? "«" : "»"}
+    </Button>
+  );
+};
+
+export function PaginationComponent({ pageCount }: Readonly<PaginationProps>) {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
+
+  const createPageURL = (pageNumber: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pageNumber.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
+  return (
+    <div className="relative col-span-6">
       <Pagination>
         <PaginationContent>
           <PaginationItem>
-            {previousPath ? <PaginationPrevious href={previousPath} /> : null}
+            <PaginationArrow
+              direction="left"
+              href={createPageURL(currentPage - 1)}
+              isDisabled={currentPage <= 1}
+            />
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="#">1</PaginationLink>
+            <span className="p-2 font-semibold text-gray-500">
+              Page {currentPage}
+            </span>
           </PaginationItem>
           <PaginationItem>
-            <PaginationLink href="#" isActive>
-              2
-            </PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationLink href="#">3</PaginationLink>
-          </PaginationItem>
-          <PaginationItem>
-            <PaginationEllipsis />
-          </PaginationItem>
-          <PaginationItem>
-            {nextPath && <PaginationNext href={nextPath} />}
+            <PaginationArrow
+              direction="right"
+              href={createPageURL(currentPage + 1)}
+              isDisabled={currentPage >= pageCount}
+            />
           </PaginationItem>
         </PaginationContent>
       </Pagination>
-    </section>
+    </div>
   );
 }

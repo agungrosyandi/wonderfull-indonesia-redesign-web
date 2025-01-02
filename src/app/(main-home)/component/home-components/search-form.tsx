@@ -1,21 +1,47 @@
 "use client";
 
+import * as React from "react";
 import { useSearch } from "@/hooks/useSearch";
 
-export default function SearchForm() {
-  const { allDatabase, handleSubmit, handleChangeSearchQuery, searchText } =
-    useSearch();
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import SearchFormsIcon from "./search-forms-icon";
+import SearchFormInput from "./search-form-input";
+
+export function SearchForm() {
+  const { open, setOpen } = useSearch();
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        className="w-[100%] h-16 rounded-lg bg-black/50 px-16 outline-none ring-[#3b1212] transition focus:ring-2 focus:bg-black/50 tabletMinWidth:w-full"
-        placeholder="Explore Destinations"
-        type="search"
-        spellCheck={false}
-        value={searchText}
-        onChange={(e) => handleChangeSearchQuery(e.target.value)}
-      />
-    </form>
+    <Dialog
+      open={open}
+      onOpenChange={() => {
+        setOpen(!open);
+      }}
+    >
+      <DialogTrigger
+        onClick={() => {
+          setOpen(!open);
+        }}
+      >
+        {/* child component search icons */}
+        <SearchFormsIcon />
+        {/* child component search icons */}
+      </DialogTrigger>
+
+      <DialogContent className="max-w-5xl min-h-[80vh max-h-[80vh] overflow-hidden flex-col">
+        <DialogHeader className="w-full flex flex-col gap-5 ">
+          <DialogTitle className="">Destination List</DialogTitle>
+          {/* child component search form */}
+          <SearchFormInput />
+          {/* child component search form */}
+        </DialogHeader>
+      </DialogContent>
+    </Dialog>
   );
 }

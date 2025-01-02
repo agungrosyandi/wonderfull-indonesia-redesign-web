@@ -1,6 +1,6 @@
 import { getDestination } from "@/actions/actions";
-import PaginationControl from "./PaginationControl";
 import DestinationsMap from "./DestinationsMap";
+import { PaginationComponent } from "./PaginationControl2";
 
 type TypeDestinationListProps = {
   places: string;
@@ -11,12 +11,12 @@ export default async function DestinationList({
   places,
   page = 1,
 }: TypeDestinationListProps) {
-  const { destinations, totalCount } = await getDestination(places, page);
+  const { destinations } = await getDestination(places, page);
 
   return (
     <>
       <DestinationsMap destinations={destinations} />
-      <PaginationControl totalCount={totalCount} places={places} page={page} />
+      <PaginationComponent pageCount={2} />
     </>
   );
 }

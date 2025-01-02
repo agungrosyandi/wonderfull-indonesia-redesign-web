@@ -22,6 +22,12 @@ export default function DestinationsMap({
       {filterDestinationList.map((destination) => (
         <EventsCard key={destination.id} destination={destination} />
       ))}
+
+      {filterDestinationList.length === 0 && (
+        <div className="relative w-full h-[50vh] col-span-6 ">
+          <p> Not result found, try another keyword !!</p>
+        </div>
+      )}
     </>
   );
 }

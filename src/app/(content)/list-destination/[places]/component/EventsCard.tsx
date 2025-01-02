@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import Description from "@/utils/global-component/Description";
 
 type EventCardProps = {
   destination: KategoriDestination;
@@ -19,10 +20,10 @@ export default function EventsCard({ destination }: EventCardProps) {
         height={500}
       />
 
-      <div className="relative text-white gap-3 flex flex-col justify-center items-center text-center p-5 tabletMinWidth:p-10">
-        <h4 className="text-xl font-bold">{destination.name}</h4>
-        <p className="text-xs">{destination.location}</p>
-        <p className="text-xs">{destination.description.slice(0, 150)}....</p>
+      <div className="relative text-white gap-5 flex flex-col justify-center items-center text-center p-5 tabletMinWidth:p-10">
+        <h4 className="text-xl font-bold fullHdMinWidth:text-2xl">{destination.name}</h4>
+        <Description>{destination.location}</Description>
+        <Description>{destination.description.slice(0, 150)}</Description>
         <Button variant={"white"}>
           <Link href={`/destination/${destination.slug}`}>Selengkapnya</Link>
         </Button>

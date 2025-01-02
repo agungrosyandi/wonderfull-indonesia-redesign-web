@@ -16,15 +16,15 @@ export default async function Login() {
   };
 
   return (
-    <section className="relative w-full h-full">
-      <div className="fixed z-[-1] inset-0 w-full h-screen">
+    <section className="relative z-30 w-full h-full">
+      <div className="fixed z-[-1] bg-black inset-0 w-full h-screen">
         <Image
+          className="blur-md"
           src={imageBackground}
           alt="imgpng"
           fill
           style={{ objectFit: "cover" }}
         />
-        <div className="absolute inset-0 w-full h-screen bg-black/30"></div>
       </div>
       <div className="w-full min-h-[100vh] flex gap-10 flex-col justify-center items-center">
         <form

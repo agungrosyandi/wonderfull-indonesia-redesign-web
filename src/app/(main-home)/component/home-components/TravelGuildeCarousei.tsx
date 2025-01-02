@@ -17,6 +17,7 @@ import { FaArrowRight } from "react-icons/fa";
 import imageEvisa from "../../../../../public/image/page-3-pic-1.jpg";
 import imageGeneralInformation from "../../../../../public/image/page-3-pic-2.jpg";
 import H1Title from "./H1Title";
+import Description from "@/utils/global-component/Description";
 
 export default function TravelGuildeCarousei() {
   const travelGuideCraousei = [
@@ -75,12 +76,7 @@ export default function TravelGuildeCarousei() {
                   <h1 className="text-xl font-bold tabletMinWidth:text-3xl">
                     {travel.title}
                   </h1>
-                  <p
-                    className={`${roboto.className} text-sm text-center tabletMinWidth:text-base`}
-                  >
-                    {travel.description}
-                  </p>
-
+                  <Description>{travel.description}</Description>
                   <Link href={travel.link}>
                     <Button variant={"link"}>
                       <FaArrowRight /> {travel.button}

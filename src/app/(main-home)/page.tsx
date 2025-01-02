@@ -6,8 +6,7 @@ import ContentContainer from "@/app/(main-home)/component/home-components/Conten
 import AboutIndonesia from "@/app/(main-home)/component/home-components/AboutIndonesia";
 import TravelGuildeCarousei from "@/app/(main-home)/component/home-components/TravelGuildeCarousei";
 import VideoBackground from "./component/home-components/VideoBackground";
-
-import { ButtonExploreDestination } from "./component/home-components/ButtonExploreDestination";
+import { SearchForm } from "./component/home-components/search-form";
 
 export default function Home() {
   return (
@@ -17,9 +16,7 @@ export default function Home() {
           Wonderful <span className="text-[#ff1f0f]">Indonesia</span>
         </HomeTitle>
         <HomeDescription>Visit our beautiful Destinations</HomeDescription>
-
-        <ButtonExploreDestination />
-        {/* <SearchForm /> */}
+        <SearchForm />
         <AboutIndonesia />
         <VideoBackground />
       </HomeContainer>

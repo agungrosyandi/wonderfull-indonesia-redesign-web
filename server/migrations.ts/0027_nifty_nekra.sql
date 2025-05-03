@@ -1,0 +1,1 @@
+ALTER TABLE "konten" ALTER COLUMN "authorId" DROP NOT NULL;

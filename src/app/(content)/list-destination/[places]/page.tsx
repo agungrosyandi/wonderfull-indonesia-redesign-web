@@ -1,47 +1,81 @@
 import H1 from "./component/H1";
-import GridContainer from "./component/GridContainer";
-import ListDestinationMainContainer from "./component/ListDestinationMainContainer";
-import { ParamsProps, PlacesPageParamsProps } from "@/utils/type";
-import { Suspense } from "react";
-import Loading from "./loading";
-import { z } from "zod";
-import ImageBackgroundListDestination from "./component/ImageBackgroundListDestination";
+import ListDestinationMainContainer from "./component/list-destination-main-container";
 
-import DestinationList from "./component/ListDestination";
+import { db } from "../../../../../server/drizzle";
+import DestinationList from "./component/destination-list-wrapper";
+import { notFound } from "next/navigation";
+import Pagination from "./component/pagination-control";
+import { sql } from "drizzle-orm";
+import { konten } from "../../../../../server/schema";
+import { Metadata } from "next";
+import ZeroData from "./component/zero-data";
 
-export function generateMetadata({ params }: ParamsProps) {
-  const places = params.places;
-  return {
-    title: places === "all" ? "All Destination" : `Searching in ${places} `,
+export const revalidate = 5;
+
+export const metadata: Metadata = {
+  title: "All Destinations",
+  description: "Explore our Beauty",
+};
+
+type Props = {
+  searchParams?: {
+    page?: string;
   };
-}
+};
 
-const pageNumberSchema = z.coerce.number().int().positive().optional();
+export default async function ListDestination({ searchParams }: Props) {
+  // limit & offshet ---------------
 
-export default async function ListDestination({
-  params,
-  searchParams,
-}: PlacesPageParamsProps) {
-  const places = params.places;
-  const parsePage = pageNumberSchema.safeParse(searchParams.page);
+  const pageSize = 6;
+  const page = Number(searchParams?.page) || 1;
 
-  if (!parsePage.success) {
-    throw new Error("Invalid page number 400");
-  }
+  if (page < 1) return notFound();
+
+  // data from database query --------------
+
+  const data = await db.query.konten.findMany({
+    with: {
+      kontenImages: true,
+      kontenTags: true,
+      user: true,
+    },
+
+    orderBy: (konten, { desc }) => [desc(konten.id)],
+    limit: pageSize,
+    offset: (page - 1) * pageSize,
+  });
+
+  // 2. Get total count
+
+  const countResult = await db
+    .select({ count: sql<number>`count(*)` })
+    .from(konten);
+
+  const totalCount = countResult[0]?.count ?? 0;
+
+  // 3. Calculate total pages
+
+  const totalPages = Math.ceil(totalCount / pageSize);
+
+  if (page > totalPages && totalPages > 0) return notFound();
+
+  // main component ----------------------
 
   return (
     <ListDestinationMainContainer>
-      <ImageBackgroundListDestination />
-      <H1>
-        {places === "all" && "All Destination"}
-        {places !== "all" && `The result destination in ${places}`}
-      </H1>
+      {/* title ---------------------------- */}
 
-      <GridContainer>
-        <Suspense key={places + parsePage.data} fallback={<Loading />}>
-          <DestinationList places={places} page={parsePage.data} />
-        </Suspense>
-      </GridContainer>
+      {data.length >= 1 ? <H1>All Destination</H1> : null}
+
+      {/* data ---------------------------- */}
+
+      {data.length === 0 ? <ZeroData /> : <DestinationList kontens={data} />}
+
+      {/* Pagination ---------------------------- */}
+
+      {data.length >= 1 ? (
+        <Pagination currentPage={page} totalPages={totalPages} />
+      ) : null}
     </ListDestinationMainContainer>
   );
 }

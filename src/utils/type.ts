@@ -5,7 +5,7 @@ export type ChildrenProps = {
 export type PaginationControlProps = {
   places: string;
   page: number;
-  totalCount: number
+  totalCount: number;
 };
 
 export type ParamsProps = {
@@ -22,4 +22,17 @@ export type ParamsPropsSlug = {
   params: {
     slug: string;
   };
+};
+
+export type AuthCardProps = {
+  children: React.ReactNode;
+  cardTitle?: string;
+  backButtonHref: string;
+  backbuttonLabel: string;
+  showSocials?: boolean;
+};
+
+export type BackButtonTypeProps = {
+  href: string;
+  label: string;
 };

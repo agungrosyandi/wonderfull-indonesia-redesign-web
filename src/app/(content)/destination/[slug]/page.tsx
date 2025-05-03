@@ -1,113 +1,169 @@
-import { getDestinationSlug } from "@/actions/actions";
-import { roboto } from "@/utils/fonts";
-import DescriptionSlug from "@/utils/global-component/DescriptionSlug";
-import { ParamsPropsSlug } from "@/utils/type";
-
-import { Metadata } from "next";
 import Image from "next/image";
+import { db } from "../../../../../server/drizzle";
+import { konten } from "../../../../../server/schema";
+import { eq } from "drizzle-orm";
+import Reviews from "@/components/reviews/reviews";
+import Stars from "@/components/reviews/stars";
+import { getReviewAverage } from "@/lib/review-average";
+import { Metadata } from "next";
+
+export const revalidate = 5;
+
+// generate metadata slug ----------------------------------------------
 
 export async function generateMetadata({
   params,
-}: ParamsPropsSlug): Promise<Metadata> {
-  const slug = params.slug;
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const kontenSlug = await db.query.konten.findFirst({
+    where: eq(konten.id, Number(params.slug)),
+  });
 
-  const destinationSlug = await getDestinationSlug(slug);
+  if (!kontenSlug) {
+    return {
+      title: "Content not found | My Website",
+      description: "The content you are looking for could not be found.",
+    };
+  }
 
   return {
-    title: destinationSlug.name,
+    title: `${kontenSlug.title} | Wonderful Indonesia`,
+    description:
+      kontenSlug.description?.substring(0, 150) || "Discover amazing content.",
+    openGraph: {
+      title: kontenSlug.title,
+    },
   };
 }
 
-export default async function EventPage({ params }: ParamsPropsSlug) {
-  const slug = params.slug;
-  const destinationSlug = await getDestinationSlug(slug);
+export async function generateStaticParams() {
+  // find data in database ----------------------------------------------
 
-  return (
-    <main className="relative">
-      <section className="relative pt-[5vh] min-h-[560px] overflow-hidden flex flex-col justify-center items-center">
-        <Image
-          className="z-0 object-cover blur-sm"
-          src={destinationSlug.imageUrl}
-          alt={destinationSlug.name}
-          fill
-          quality={50}
-          sizes="(max-width: 1280px) 100vw, 1280px"
-          priority
-        />
+  const data = await db.query.konten.findMany({
+    with: {
+      kontenImages: true,
+      kontenTags: true,
+    },
+    orderBy: (konten, { desc }) => [desc(konten.id)],
+  });
 
-        <div className="relative z-1 flex flex-col py-10 justify-center items-center gap-5 px-[5%] tabletMinWidth:flex-row desktopMinWidth:gap-10">
-          <Image
-            className="border"
-            src={destinationSlug.imageUrl}
-            alt={destinationSlug.name}
-            width={500}
-            height={500}
-          />
+  if (!data) return [];
 
-          <div className="flex flex-col justify-center items-center gap-2 tabletMinWidth:text-start tabletMinWidth:items-start">
-            <div className="text-xs">
-              {new Date(destinationSlug.date).toLocaleDateString("eng-US", {
-                weekday: "long",
+  if (data) return data.map((konten) => ({ slug: konten.id.toString() }));
+
+  return;
+}
+
+// main page ----------------------------------------------
+
+export default async function DestinationSlug({
+  params,
+}: {
+  params: { slug: string };
+}) {
+  // find konten data in database -------------------------------
+
+  const kontenSlug = await db.query.konten.findFirst({
+    where: eq(konten.id, Number(params.slug)),
+    with: {
+      reviews: true,
+      kontenImages: true,
+      kontenTags: true,
+    },
+  });
+
+  if (kontenSlug) {
+    const reviewAvg = getReviewAverage(
+      kontenSlug?.reviews.map((r) => r.rating)
+    );
+
+    const placeholderImage = "/image/landscape-placeholder-svgrepo-com.svg";
+
+    const imageUrls = [
+      kontenSlug.kontenImages[0]?.url || placeholderImage,
+      kontenSlug.kontenImages[1]?.url || placeholderImage,
+      kontenSlug.kontenImages[2]?.url || placeholderImage,
+    ];
+
+    return (
+      <main className="relative mt-[10vh] mx-[5%] fullHdMinWidth:mx-[10%] ">
+        <section className="border-b-2 gap-3 py-5 flex flex-col justify-between tabletMinWidth:flex-row tabletMinWidth:items-end">
+          <div className=" text-black flex flex-col gap-2 ">
+            <h1 className="text-lg font-bold tabletMinWidth:text-2xl">
+              {kontenSlug.title}
+            </h1>
+
+            <div className="flex flex-row gap-1">
+              <p className="text-xs font-bold">Location: </p>
+              <p className="text-xs font-normal">{kontenSlug.kota}, </p>
+              <p className="text-xs font-normal">{kontenSlug.lokasi}</p>
+            </div>
+
+            <p className="text-xs font-bold">
+              Last Update :
+              {kontenSlug.created?.toLocaleDateString("id-ID", {
+                year: "numeric",
                 month: "long",
                 day: "numeric",
               })}
-            </div>
-
-            <h1 className="text-2xl font-bold">{destinationSlug.name}</h1>
-            <p className="text-sm text-center opacity-50 px-[5%] tabletMinWidth:text-start tabletMinWidth:px-[0]">
-              <span className="italic">{destinationSlug.location}</span>
-            </p>
-            <p className="text-xs bg-black/50 border py-2 px-5">
-              Find on the Map
             </p>
           </div>
-        </div>
-      </section>
+          <div>
+            <Stars
+              rating={reviewAvg}
+              totalReviews={kontenSlug.reviews.length}
+            />
+          </div>
+        </section>
 
-      <section
-        className=" text-black flex flex-col justify-center items-center text-center py-10 px-[5%] fullHdMinWidth:px-[10%]
-      "
-      >
-        <div className="flex flex-col gap-5">
+        {/* image slug  ------------------------ */}
+
+        <section className=" text-black flex flex-col py-5">
+          <div className="relative flex w-full flex-col gap-5 tabletMinWidth:flex-row-reverse tabletMinWidth:flex-1 tabletMinWidth:items-center">
+            {imageUrls.map((url, index) => (
+              <div
+                key={index}
+                className={`relative w-full h-[25rem] tabletMinWidth:h-[30rem] ${
+                  index > 0 ? "hidden tabletMinWidth:block" : ""
+                }`}
+              >
+                <Image
+                  className="absolute inset-0 w-full h-full"
+                  src={url}
+                  alt={`${kontenSlug.title} image ${index + 1}`}
+                  width={500}
+                  height={500}
+                  style={{ objectFit: "cover" }}
+                />
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Description slug  ------------------------------------- */}
+
+        <section className=" text-black flex flex-col justify-center items-center text-center py-5">
           <h2 className="text-lg font-bold tabletMinWidth:text-2xl">
             About Destinations
           </h2>
-          <div className="flex gap-1 flex-row items-center justify-center">
-            <h2 className="text-xs font-bold">Location :</h2>
-            <p className="text-xs font-bold">{destinationSlug.city}, </p>
-            <p className="text-xs font-bold">{destinationSlug.location}</p>
-          </div>
-          <DescriptionSlug>{destinationSlug.description}</DescriptionSlug>
-          <div className="relative flex flex-col gap-5 tabletMinWidth:flex-row-reverse tabletMinWidth:flex-1 tabletMinWidth:items-center">
-            <div className="relative">
-              <Image
-                src={destinationSlug.imageUrl1}
-                alt={destinationSlug.name}
-                width={500}
-                height={500}
-              />
-            </div>
-            <div className="relative">
-              <Image
-                src={destinationSlug.imageUrl2}
-                alt={destinationSlug.name}
-                width={500}
-                height={500}
-              />
-            </div>
-            <div className="relative">
-              <Image
-                src={destinationSlug.imageUrl3}
-                alt={destinationSlug.name}
-                width={500}
-                height={500}
-              />
-            </div>
-          </div>
-          <DescriptionSlug>{destinationSlug.description2}</DescriptionSlug>
-          <DescriptionSlug>{destinationSlug.description3}</DescriptionSlug>
-        </div>
-      </section>
-    </main>
-  );
+        </section>
+
+        <section className=" text-black flex flex-col py-5">
+          <div
+            className="flex flex-col gap-2 text-base"
+            dangerouslySetInnerHTML={{ __html: kontenSlug.description }}
+          />
+        </section>
+
+        {/* review variant  ------------------------ */}
+
+        {/* import from reviews.tsx component ------------------------ */}
+
+        <section className="py-5">
+          <Reviews kontenID={kontenSlug.id} />
+        </section>
+      </main>
+    );
+  }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "kontenDetails" DROP COLUMN "kontenType";

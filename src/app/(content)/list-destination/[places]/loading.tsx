@@ -8,7 +8,7 @@ export default function Loading() {
   const array = new Array(6).fill(null);
 
   return (
-    <>
+    <section className="px-[5%] grid grid-cols-6 gap-5 mt-[10vh] fullHdMinWidth:px-[10%]">
       <div className="relative w-full h-full col-span-6">
         <div className="flex flex-row justify-center items-center gap-2">
           <Image src={spinnerLoading} alt="loading" width={50} height={50} />
@@ -32,6 +32,6 @@ export default function Loading() {
           </>
         </section>
       ))}
-    </>
+    </section>
   );
 }

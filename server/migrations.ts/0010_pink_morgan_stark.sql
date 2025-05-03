@@ -1,0 +1,1 @@
+ALTER TABLE "konten" ADD COLUMN "kontenType" text NOT NULL;

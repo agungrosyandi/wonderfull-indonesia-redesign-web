@@ -1,54 +1,35 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "@/app/(main-home)/component/Header";
-import Container from "@/app/(main-home)/component/Container";
+import Header from "@/components/layout/Header";
+import Container from "@/components/layout/Container";
 import { ReactLenis } from "@/hooks/useLenis";
 import StateContextProvider from "@/contexts/context-provider";
-import { getDestination, searchDestinations } from "@/actions/actions";
-import { Toaster } from "@/components/ui/sonner";
-import prisma from "@/utils/db";
-import Footer from "@/app/(main-home)/component/Footer";
+import Footer from "@/components/layout/Footer";
+import Toaster from "@/components/reusable/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Wonderful Indonesia",
-  description: "temukan event-event menarik di kota Bandung",
+  description: "Explore our Beauty",
 };
 
-export default async function RootLayout(
-  {
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>,
-  places: string,
-  page = 1,
-  searchQuery: string
-) {
-  const { destinations, totalCount } = await getDestination(places, (page = 1));
-  const allDatabase = await prisma.kategoriDestination.findMany();
-
-  // const allDatabase = await searchDestinations(searchQuery);
-
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <ReactLenis root>
-        <body className={`${inter.className} bg-white text-white `}>
+        <body className={`${inter.className}`}>
           <Container>
             <Header />
-            <StateContextProvider
-              allDatabase={allDatabase}
-              destinations={destinations}
-              totalCount={totalCount}
-            >
-              {children}
-            </StateContextProvider>
+            <Toaster />
+            <StateContextProvider>{children}</StateContextProvider>
             <Footer />
           </Container>
-
-          <Toaster position="top-left" />
         </body>
       </ReactLenis>
     </html>

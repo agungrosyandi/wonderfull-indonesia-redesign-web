@@ -1,30 +1,44 @@
 "use client";
 
-import { KategoriDestination } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { createContext, useState, Dispatch, SetStateAction } from "react";
 
 // type ---------------------------------------------------------------------------------
 
 type ContextProviderProps = {
-  totalCount: number;
   children: React.ReactNode;
-  allDatabase: KategoriDestination[];
-  destinations: KategoriDestination[];
 };
 
 type TstateContext = {
-  totalCount: number;
-  searchText: string;
+  // database type state ----------------------
+
+  // handle logic type state ----------------------
+
   handleChangeSearchQuery: (newValue: string) => void;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  destinations: KategoriDestination[];
-  allDatabase: KategoriDestination[];
+
+  // search type state ----------------------
+
+  searchText: string;
   setSearchText: Dispatch<SetStateAction<string>>;
+
+  // open type state ----------------------
+
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
+
+  // loading type state ----------------------
+
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
+
+  // error type state ----------------------
+  error: string;
+  setError: Dispatch<SetStateAction<string>>;
+
+  // success type state ----------------------
+  success: string;
+  setSuccess: Dispatch<SetStateAction<string>>;
 };
 
 // function ---------------------------------------------------------------------------------
@@ -32,17 +46,20 @@ type TstateContext = {
 export const StateContext = createContext<TstateContext | null>(null);
 
 export default function StateContextProvider({
-  allDatabase: allDatabase,
-  destinations: destinations,
-  totalCount: totalCount,
   children,
 }: ContextProviderProps) {
   // usestate logic ------------------------------------------------------------------
 
   const [searchText, setSearchText] = useState<string>("");
-  const router = useRouter();
+
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // navigation logic ------------------------------------------------------------------
+
+  const router = useRouter();
 
   // javascript logic ------------------------------------------------------------------
 
@@ -69,14 +86,15 @@ export default function StateContextProvider({
         searchText,
         handleChangeSearchQuery,
         handleSubmit,
-        destinations,
-        totalCount,
-        allDatabase,
         setSearchText,
         open,
         setOpen,
         loading,
         setLoading,
+        error,
+        setError,
+        success,
+        setSuccess,
       }}
     >
       {children}

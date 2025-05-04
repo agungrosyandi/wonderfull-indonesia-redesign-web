@@ -1,10 +1,11 @@
-import { roboto } from "@/utils/fonts";
+
 import H1Title from "./h1-title";
 import { TravelGuideImage1, TravelGuideImage2 } from "./image-destinations";
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
 import { FaArrowRight } from "react-icons/fa";
+import { roboto } from "@/utils/font";
 
 export default function DestinationHighlight() {
   return (

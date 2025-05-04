@@ -76,16 +76,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     // add google auth as account login + integration to database .....--------------
 
-    Google({
-      clientId:
-        process.env.NODE_ENV === "production"
-          ? process.env.AUTH_GOOGLE_ID_PRODUCTION!
-          : process.env.AUTH_GOOGLE_ID!,
-      clientSecret:
-        process.env.NODE_ENV === "production"
-          ? process.env.AUTH_GOOGLE_SECRET_PRODUCTION!
-          : process.env.AUTH_GOOGLE_SECRET!,
-    }),
+    Google,
 
     // add credentian register account with token .....--------------
 

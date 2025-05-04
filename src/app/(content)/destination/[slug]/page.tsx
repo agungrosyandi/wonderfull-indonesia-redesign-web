@@ -48,11 +48,7 @@ export async function generateStaticParams() {
     orderBy: (konten, { desc }) => [desc(konten.id)],
   });
 
-  if (!data) return [];
-
-  if (data) return data.map((konten) => ({ slug: konten.id.toString() }));
-
-  return;
+  return data.map((konten) => ({ slug: konten.id.toString() }));
 }
 
 // main page ----------------------------------------------
